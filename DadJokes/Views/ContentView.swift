@@ -10,6 +10,9 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: Stored properties
+    // Detect when an app moves between foreground, background and inactive states.
+    // NOTE: A complete list can be found at: developper apple environmental values.
+    @Environment(\.scenePhase) var scenePhase
     @State var currentJoke: DadJoke = DadJoke(id: "",
                                        joke: "Knock, knock...",
                                        status: 0)
@@ -102,6 +105,16 @@ struct ContentView: View {
             await loadNewJoke()
             
             print("I tried to load a new joke")
+        }
+        // React to changes of state for the app. (foreground, inactive, background)
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .inactive {
+                print("Inactive")
+            } else if newPhase == .active {
+                print("Active")
+            } else {
+                print("Background")
+            }
         }
         .navigationTitle("icanhazdadjoke?")
         .padding()
